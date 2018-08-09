@@ -1,0 +1,37 @@
+#! /bin/bash
+
+source `dirname $0`/script-config
+
+versions=(
+  $DISTRO_PREFIX-4.1.1
+  $DISTRO_PREFIX-3.6.6
+  $DISTRO_PREFIX-3.5.13
+  $DISTRO_PREFIX-3.4.16
+)
+ext=".tgz"
+
+echo "Getting Various Releases releases"
+
+if [ ! -d mongodb/archives ]; then
+  echo "Creating Archive Dir"
+  mkdir -p mongodb/archives
+fi;
+
+cd mongodb/archives
+
+for version in ${versions[*]}; do
+  if [ ! -e $version$ext ]; then
+    echo "Fetching $version"
+    wget https://fastdl.mongodb.org/linux/$version$ext
+  fi;
+done;
+
+cd ..
+
+for version in ${versions[*]}; do
+  if [ ! -d $version ]; then
+    echo "Extracting $version"
+    tar -xzf archives/$version$ext
+  fi;
+done;
+

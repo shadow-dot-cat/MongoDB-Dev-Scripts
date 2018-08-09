@@ -1,0 +1,3 @@
+#! /bin/bash
+
+export MONGOPATH=$(find `pwd`/mongodb -type d -name bin | sort -r | perl -wE 'say join(":",map {chomp; $_} <>)')

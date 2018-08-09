@@ -1,0 +1,36 @@
+#! /bin/bash
+
+wd=$(pwd)
+
+source `dirname $0`/script-config
+
+if [[ -z "${LOCAL_MONGO_VER}" ]]; then
+  LOCAL_MONGO_VER=3.4.10
+fi
+
+version=$DISTRO_PREFIX-$LOCAL_MONGO_VER
+
+cat <<EOF > var/$version/mongodb.conf
+storage:
+    dbPath: $wd/var/$version/db
+    preallocDataFiles: false
+    nsSize: 6
+    smallFiles: true
+
+systemLog:
+    destination: file
+    path: $wd/var/$version/mongodb.log
+    quiet: true
+    logAppend: false
+
+processManagement:
+    pidFilePath: $wd/var/mongodb.pid
+
+net:
+    port: 27017
+    http:
+        enabled: false
+
+setParameter:
+    enableTestCommands: 1
+EOF

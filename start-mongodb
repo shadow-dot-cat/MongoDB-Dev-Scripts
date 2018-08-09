@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# get base path
+wd=$(pwd)
+source `dirname $0`/script-config
+pidfile=$wd/var/mongodb.pid
+
+if [[ -z "${LOCAL_MONGO_VER}" ]]; then
+  LOCAL_MONGO_VER=3.4.10
+fi
+
+version=$DISTRO_PREFIX-$LOCAL_MONGO_VER
+
+if [[ -e $pidfile ]]; then
+    pid=$(cat $pidfile)
+    ps -p $pid &> /dev/null
+    if (( $? )); then
+        echo "mongodb has pid file but not running; cleaning up"
+        rm -f $pidfile
+    else
+        echo "mongodb already running as $pid"
+        exit
+    fi
+fi
+
+# ensure we have clear data directory
+if [[ -d $wd/var ]]; then
+    rm -rf $wd/var/$version/db
+fi
+mkdir -p $wd/var/$version/db
+
+# launch mongo
+$wd/mongodb/$version/bin/mongod --config $wd/var/$version/mongodb.conf --fork
+if (( $? )); then
+    echo "error starting mongodb"
+else
+    echo "mongodb started"
+fi

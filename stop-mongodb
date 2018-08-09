@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# get base path
+wd=$(pwd)
+pidfile=$wd/var/mongodb.pid
+
+if [[ -e $pidfile ]]; then
+    pid=$(cat $pidfile)
+    ps -p $pid &> /dev/null
+    if (( $? )); then
+        echo "found mongodb stale pid file; cleaning up"
+        rm -f $pidfile
+    else
+        kill $pid
+        for (( i=0; i<20; i++ )); do
+            sleep 1
+            ps -p $pid &> /dev/null
+            if (( $? )); then
+                echo "mongodb terminated"
+                rm -f $pidfile
+                exit
+            fi
+        done
+        echo "error terminating mongodb $pid: aborting"
+    fi
+else
+    echo "mongodb not running"
+fi

@@ -1,0 +1,13 @@
+#! /bin/bash
+# Debian 8
+#DISTRO_PREFIX=mongodb-linux-x86_64-debian81
+# Debian 9
+#DISTRO_PREFIX=mongodb-linux-x86_64-debian92
+# Ubuntu 14.04
+#DISTRO_PREFIX=mongodb-linux-x86_64-ubuntu1404
+# Ubuntu 16.04
+#DISTRO_PREFIX=mongodb-linux-x86_64-ubuntu1604
+# Ubuntu 16.04 ARM 64
+#DISTRO_PREFIX=mongodb-linux-arm64-ubuntu1604
+# Ubuntu 18.04
+#DISTRO_PREFIX=mongodb-linux-x86_64-ubuntu1804
